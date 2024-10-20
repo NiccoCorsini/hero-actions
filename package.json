@@ -1,0 +1,45 @@
+{
+  "name": "hero-actions",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [
+    "redux",
+    "typescript",
+    "action creators",
+    "reducers",
+    "redux actions",
+    "redux reducers",
+    "type-safe",
+    "action creators redux",
+    "redux toolkit",
+    "minimal boilerplate",
+    "redux utils",
+    "hero-actions",
+    "type-safe redux",
+    "redux state management",
+    "redux action creators",
+    "redux reducers typescript",
+    "combineReducers",
+    "redux-modular",
+    "state management"
+  ],
+  "author": "Niccolò Corsini",
+  "license": "ISC",
+  "description": "A TypeScript library for creating type-safe Redux action creators and reducers with minimal boilerplate.",
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NiccoCorsini/hero-actions.git"
+  },
+  "homepage": "https://github.com/NiccoCorsini/hero-actions#readme"
+}
