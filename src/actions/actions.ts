@@ -71,7 +71,7 @@ export const createActionForPayloads = <Payloads extends PayloadsTree>() => {
   ): Payloads[T] extends undefined
     ? () => Action<T>
     : (payload: Payloads[T]) => ActionWithPayload<T, Payloads[T]> =>
-    ((payload?: any) =>
+    ((payload?: Payloads[T]) =>
       payload !== undefined
         ? createPayloadAction(type)(payload)
         : createSimpleAction(type)()) as any;
