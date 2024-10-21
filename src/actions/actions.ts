@@ -4,11 +4,11 @@ import {
   PayloadsTree,
 } from "../definitions/actions";
 
-const createSimpleAction =
+export const createSimpleAction =
   <T extends string>(type: T): (() => Action<T>) =>
   () => ({ type });
 
-const createPayloadAction =
+export const createPayloadAction =
   <T extends string, P>(type: T): ((payload: P) => ActionWithPayload<T, P>) =>
   (payload: P) => ({ type, payload });
 

@@ -1,4 +1,6 @@
 import { Action, ActionWithPayload, PayloadsTree } from "../definitions/actions";
+export declare const createSimpleAction: <T extends string>(type: T) => (() => Action<T>);
+export declare const createPayloadAction: <T extends string, P>(type: T) => ((payload: P) => ActionWithPayload<T, P>);
 /**
  * Creates a factory function for generating type-safe Redux action creators based on a mapping of action payloads.
  *

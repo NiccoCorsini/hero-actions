@@ -1,7 +1,7 @@
-var createSimpleAction = function (type) {
+export var createSimpleAction = function (type) {
     return function () { return ({ type: type }); };
 };
-var createPayloadAction = function (type) {
+export var createPayloadAction = function (type) {
     return function (payload) { return ({ type: type, payload: payload }); };
 };
 /**
