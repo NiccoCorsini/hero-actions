@@ -234,7 +234,7 @@ Example:
 ```typescript
 // store/reducers/auth.ts
 
-import { createReducer, createHandlers } from "hero-actions";
+import { createReducer, createHandlers, PayloadsTree } from "hero-actions";
 import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
 
 // Define the state interface
@@ -278,9 +278,15 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
 // Create the reducer
 export const authReducer = createReducer<AuthState, AuthPayloads>(
   initialState,
-  authHandlers
+  authHandlers as PayloadsTree // Remember this!
 );
 ```
+
+### Note on Casting Handlers
+
+When using `createReducer`, it is important to cast the handlers created with `createHandlers` to `PayloadsTree`. This casting ensures that TypeScript can infer the correct types without conflicts. The handlers might need to be explicitly cast to `PayloadsTree` to avoid issues where TypeScript cannot match the action types correctly.
+
+This cast is necessary especially when working with complex types that TypeScript may struggle to infer.
 
 ### Compatibility
 
@@ -294,9 +300,13 @@ If you're using the traditional `createStore` and `combineReducers`, you can int
 // store.ts
 
 import { legacy_createStore as createStore, combineReducers } from "redux";
-import { authReducer } from "./authReducer";
+import { AuthState, authReducer } from "./reducers/auth";
 // Import other reducers if you have them
 // import { otherReducer } from './otherReducer';
+
+export type State = {
+  auth: AuthState;
+};
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -317,11 +327,15 @@ If you're using `@reduxjs/toolkit`'s more modern `configureStore`, `hero-actions
 // store.ts
 
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "./authReducer";
+import { AuthState, authReducer } from "./reducers/auth";
 // Import other reducers if you have them
 // import { otherReducer } from './otherReducer';
 
-const store = configureStore({
+export type State = {
+  auth: AuthState;
+};
+
+const store = configureStore<State>({
   reducer: {
     auth: authReducer,
     // Include other reducers here
