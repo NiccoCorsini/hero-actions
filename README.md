@@ -356,18 +356,18 @@ When working with Redux in a TypeScript environment, it's essential to manage yo
 
 When configuring your Redux store, you typically define a `State` type representing the structure of your global state. However, explicitly specifying this type is not required because TypeScript can infer it based on the reducers provided. Here's an example:
 
-    ```typescript
-    export type State = {
-      auth: AuthState;
-    };
+```typescript
+export type State = {
+  auth: AuthState;
+};
 
-    // you don't need to specify <State> it will work fine without it
-    const store = configureStore<State>({
-      reducer: {
-        auth: authReducer,
-      },
-    });
-    ```
+// you don't need to specify <State> it will work fine without it
+const store = configureStore<State>({
+  reducer: {
+    auth: authReducer,
+  },
+});
+```
 
 In the above example:
 
@@ -388,17 +388,17 @@ Specifying the global state type manually can introduce several problems:
 
 Despite the advantages of type inference, it's **recommended** to define a global state type for specific use cases, such as creating selectors or accessing state properties directly. Defining a `State` type enhances code readability and provides strong typing when accessing nested state properties. Here's how you can achieve this:
 
-    ```typescript
-    //Recommended solution
-    export type State = ReturnType<typeof store.getState>;
+```typescript
+//Recommended solution
+export type State = ReturnType<typeof store.getState>;
 
-    //If you prefer, it will also work by declaring it manually like this
-    export type State = {
-      auth: AuthState;
-    };
+//If you prefer, it will also work by declaring it manually like this
+export type State = {
+  auth: AuthState;
+};
 
-    const { isAuthenticated } = useSelector((store: State) => store.auth);
-    ```
+const { isAuthenticated } = useSelector((store: State) => store.auth);
+```
 
 #### Benefits of Defining a Global State Type
 
