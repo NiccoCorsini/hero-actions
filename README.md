@@ -12,8 +12,10 @@ A powerful TypeScript library designed to streamline the creation of type-safe R
   - [Defining Payload Types](#defining-payload-types)
   - [Creating Action Creators](#creating-action-creators)
   - [Dispatching Actions](#dispatching-actions)
+  - [Why use Redux-Saga](#why-use-redux-saga)
   - [Creating Reducers](#creating-reducers)
   - [Compatibility](#compatibility)
+  - [Managing Global State Types in Redux with TypeScript](#managing-global-state-types-in-redux-with-typescript)
 - [API Reference](#api-reference)
   - [createActionForPayloads](#createactionforpayloads)
   - [createReducer](#createreducer)
@@ -335,7 +337,7 @@ export type State = {
   auth: AuthState;
 };
 
-const store = configureStore<State>({
+const store = configureStore({
   reducer: {
     auth: authReducer,
     // Include other reducers here
@@ -345,6 +347,70 @@ const store = configureStore<State>({
 
 export default store;
 ```
+
+### Managing Global State Types in Redux with TypeScript
+
+When working with Redux in a TypeScript environment, it's essential to manage your global state types effectively. However, specifying the type of the global state explicitly is often unnecessary and can introduce complications, especially when integrating middleware. Below is a comprehensive explanation of why TypeScript's type inference capabilities suffice for defining the global state and the scenarios where defining a global state type remains beneficial.
+
+#### Let TypeScript Infer the Global State Type
+
+When configuring your Redux store, you typically define a `State` type representing the structure of your global state. However, explicitly specifying this type is not required because TypeScript can infer it based on the reducers provided. Here's an example:
+
+    ```typescript
+    export type State = {
+      auth: AuthState;
+    };
+
+    // you don't need to specify <State> it will work fine without it
+    const store = configureStore<State>({
+      reducer: {
+        auth: authReducer,
+      },
+    });
+    ```
+
+In the above example:
+
+- **Type Inference**: TypeScript automatically infers the `State` type from the `authReducer` and any other reducers you include. This reduces redundancy and minimizes the risk of type mismatches.
+- **Middleware Compatibility**: Explicitly defining the `State` type can lead to compatibility issues with middleware, whether you're using legacy Redux middleware or the middleware provided by Redux Toolkit. Type inference ensures seamless integration without additional type declarations that might conflict with middleware expectations.
+
+#### Potential Issues with Explicit Type Definitions
+
+Specifying the global state type manually can introduce several problems:
+
+1. **Type Mismatches**: Manually maintaining the `State` type increases the risk of discrepancies between the state shape and the reducers, leading to potential runtime errors.
+
+2. **Middleware Conflicts**: Middleware often expects specific type configurations. Explicitly defining the `State` type might interfere with these expectations, causing unexpected behavior or type errors.
+
+3. **Reduced Flexibility**: As your application grows and the state shape evolves, manually updating the `State` type can become cumbersome and error-prone.
+
+#### Recommended: Define a Global State Type for Selectors and State Access
+
+Despite the advantages of type inference, it's **recommended** to define a global state type for specific use cases, such as creating selectors or accessing state properties directly. Defining a `State` type enhances code readability and provides strong typing when accessing nested state properties. Here's how you can achieve this:
+
+    ```typescript
+    //Recommended solution
+    export type State = ReturnType<typeof store.getState>;
+
+    //If you prefer, it will also work by declaring it manually like this
+    export type State = {
+      auth: AuthState;
+    };
+
+    const { isAuthenticated } = useSelector((store: State) => store.auth);
+    ```
+
+#### Benefits of Defining a Global State Type
+
+1. **Enhanced Type Safety**: Explicitly defining the `State` type ensures that selectors and state accesses are type-safe, reducing the likelihood of runtime errors.
+
+2. **Improved Developer Experience**: Strongly typed selectors provide better IntelliSense support in IDEs, making it easier to navigate and utilize the state.
+
+3. **Maintainable Codebase**: A well-defined `State` type serves as a single source of truth for the application's state structure, facilitating easier maintenance and scalability.
+
+#### Conclusion
+
+While TypeScript's type inference capabilities eliminate the need to manually specify the global state type in Redux configurations, defining a `State` type remains beneficial for creating robust selectors and accessing state properties with type safety. Balancing type inference with explicit type definitions where necessary ensures a maintainable and error-resistant Redux setup.
 
 ### Key Benefits of Compatibility
 
