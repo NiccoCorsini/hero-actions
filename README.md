@@ -1,6 +1,27 @@
+<div align="center">
+
 # hero-actions
 
 A powerful TypeScript library designed to streamline the creation of type-safe Redux action creators and reducers. With **hero-actions**, you can reduce boilerplate code, improve type safety, and write cleaner, more maintainable Redux logic.
+
+[![Latest Stable Version](https://img.shields.io/npm/v/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
+[![NPM Downloads](https://img.shields.io/npm/dm/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
+[![NPM Downloads](https://img.shields.io/npm/dt/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
+[![Bundlephobia Size](https://img.shields.io/bundlephobia/minzip/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
+[![License](https://img.shields.io/npm/l/hero-actions.svg?style=flat)](https://github.com/NiccoCorsini/hero-actions?tab=License-1-ov-file)
+
+_Found it useful? Want more updates?_
+
+[**Show your support by giving a :star:**](https://github.com/NiccoCorsini/hero-actions/stargazers)
+
+<a href="https://buymeacoffee.com/niccocorsini">
+  <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
+</a>
+
+<br/>
+<hr/>
+
+</div>
 
 ## Table of Contents
 
