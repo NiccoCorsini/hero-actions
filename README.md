@@ -1,6 +1,14 @@
 <div align="center">
 
-# hero-actions
+<div align="center" style="display: flex; align-items: center; justify-content: center;">
+
+  <img src="./assets/hero-actions-logo.webp" alt="hero-actions-logo" width="50" style="margin-right: 8px;"/>
+
+  <h1 style="border-bottom: none; margin: 18px 0 0;">hero-actions</h1>
+
+</div>
+
+<hr style="width: 100%; border: 1px solid #ddd;"/>
 
 A powerful TypeScript library designed to streamline the creation of type-safe Redux action creators and reducers. With **hero-actions**, you can reduce boilerplate code, improve type safety, and write cleaner, more maintainable Redux logic.
 
@@ -257,7 +265,7 @@ Example:
 ```typescript
 // store/reducers/auth.ts
 
-import { createReducer, createHandlers, PayloadsTree } from "hero-actions";
+import { createReducer, createHandlers } from "hero-actions";
 import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
 
 // Define the state interface
@@ -301,15 +309,9 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
 // Create the reducer
 export const authReducer = createReducer<AuthState, AuthPayloads>(
   initialState,
-  authHandlers as PayloadsTree // Remember this!
+  authHandlers
 );
 ```
-
-### Note on Casting Handlers
-
-When using `createReducer`, it is important to cast the handlers created with `createHandlers` to `PayloadsTree`. This casting ensures that TypeScript can infer the correct types without conflicts. The handlers might need to be explicitly cast to `PayloadsTree` to avoid issues where TypeScript cannot match the action types correctly.
-
-This cast is necessary especially when working with complex types that TypeScript may struggle to infer.
 
 ### Compatibility
 
