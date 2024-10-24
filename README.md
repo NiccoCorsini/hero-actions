@@ -1,14 +1,8 @@
 <div align="center">
 
-<div align="center" style="display: flex; align-items: center; justify-content: center;">
+  <img src="./assets/hero-actions-logo.webp" alt="hero-actions-logo" width="50"/>
 
-  <img src="./assets/hero-actions-logo.webp" alt="hero-actions-logo" width="50" style="margin-right: 8px;"/>
-
-  <h1 style="border-bottom: none; margin: 18px 0 0;">hero-actions</h1>
-
-</div>
-
-<hr style="width: 100%; border: 1px solid #ddd;"/>
+# hero-actions
 
 A powerful TypeScript library designed to streamline the creation of type-safe Redux action creators and reducers. With **hero-actions**, you can reduce boilerplate code, improve type safety, and write cleaner, more maintainable Redux logic.
 
