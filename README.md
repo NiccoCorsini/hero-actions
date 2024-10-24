@@ -88,7 +88,6 @@ enum AuthActionTypes {
   LOGIN_REQUEST = "auth/LOGIN_REQUEST",
   LOGIN_SUCCESS = "auth/LOGIN_SUCCESS",
   LOGIN_FAILURE = "auth/LOGIN_FAILURE",
-  LOGOUT = "auth/LOGOUT",
 }
 ```
 
@@ -100,10 +99,9 @@ Create an interface `AuthPayloads` mapping each action type to its payload:
 // definitions/actions/auth.ts
 
 export interface AuthActionsPayloads {
-  [AuthActionTypes.LOGIN_REQUEST]: { username: string; password: string };
+  [AuthActionTypes.LOGIN_REQUEST]: undefined; // No payload for loginRequest
   [AuthActionTypes.LOGIN_SUCCESS]: { userId: string; token: string };
   [AuthActionTypes.LOGIN_FAILURE]: { error: Error };
-  [AuthActionTypes.LOGOUT]: undefined; // No payload for logout
 }
 ```
 
@@ -126,7 +124,6 @@ const createAuthAction = createActionForPayloads<AuthPayloads>();
 export const loginRequest = createAuthAction(AuthActionTypes.LOGIN_REQUEST);
 export const loginSuccess = createAuthAction(AuthActionTypes.LOGIN_SUCCESS);
 export const loginFailure = createAuthAction(AuthActionTypes.LOGIN_FAILURE);
-export const logout = createAuthAction(AuthActionTypes.LOGOUT);
 ```
 
 ### Dispatching Actions
@@ -144,7 +141,6 @@ import {
   loginRequest,
   loginSuccess,
   loginFailure,
-  logout,
 } from "../../../store/actions/auth";
 
 const MyComponent = () => {
@@ -158,8 +154,8 @@ const MyComponent = () => {
     // Set loading state to true
     setLoading(true);
 
-    // Dispatching login request with the entered credentials
-    dispatch(loginRequest({ username, password }));
+    // Dispatching login request action
+    dispatch(loginRequest());
 
     try {
       // Perform the login API call
@@ -182,11 +178,6 @@ const MyComponent = () => {
 
       // Dispatching login success with the received user data
       dispatch(loginSuccess({ userId, token }));
-
-      // Simulate a logout after 3 seconds
-      setTimeout(() => {
-        dispatch(logout());
-      }, 3000);
     } catch (error) {
       dispatch(loginFailure({ error }));
       console.error("Login failed", error);
@@ -280,6 +271,7 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
   [AuthActionTypes.LOGIN_REQUEST]: (state) => ({
     ...state,
     isAuthenticated: false, // Optionally set to false while logging in
+    error: undefined,
   }),
   [AuthActionTypes.LOGIN_SUCCESS]: (state, action) => ({
     ...state,
@@ -291,12 +283,6 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
     ...state,
     isAuthenticated: false,
     error: action.payload.error,
-  }),
-  [AuthActionTypes.LOGOUT]: (state) => ({
-    ...state,
-    isAuthenticated: false,
-    userId: undefined,
-    token: undefined,
   }),
 });
 
