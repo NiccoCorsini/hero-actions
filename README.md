@@ -39,6 +39,7 @@ _Found it useful? Want more updates?_
   - [Creating Reducers](#creating-reducers)
   - [Compatibility](#compatibility)
   - [Managing Global State Types in Redux with TypeScript](#managing-global-state-types-in-redux-with-typescript)
+- [Example Project](#example-project)
 - [API Reference](#api-reference)
   - [createActionForPayloads](#createactionforpayloads)
   - [createReducer](#createreducer)
@@ -421,6 +422,17 @@ While TypeScript's type inference capabilities eliminate the need to manually sp
 - **Modern Support**: For newer projects or refactoring efforts, `hero-actions` works perfectly with `@reduxjs/toolkit`, supporting `configureStore` for a cleaner, more maintainable setup.
 - **Reducer Combination**: Both `combineReducers` and `configureStore` allow for combining multiple reducers, making `hero-actions` compatible with modular and scalable Redux architectures.
 
+### Example Project
+
+To help you get started with **hero-actions**, I’ve created a fully-functional example project that demonstrates its core capabilities in a real-world scenario. This example shows how to integrate **hero-actions** with Redux core and Redux-Saga to manage a simulated login/logout flow. It also includes **redux-logger** for monitoring action flows, payloads, and state transitions, providing a clear view of how **hero-actions** simplifies action management.
+
+You can explore the project in detail via the following links:
+
+- **Live Demo**: [GitHub Pages](https://niccocorsini.github.io/hero-actions-demo/)
+- **CodeSandbox**: [CodeSanbox Link](https://codesandbox.io/p/github/NiccoCorsini/hero-actions-demo/main)
+
+For a deeper dive, check out the [hero-actions-demo repository](https://github.com/NiccoCorsini/hero-actions-demo) on GitHub.
+
 ## API Reference
 
 ### `createActionForPayloads`
@@ -476,7 +488,7 @@ A reducer function compatible with Redux.
 
 ## License
 
-This project is licensed under the ISC License. See the LICENSE file for details.
+This project is licensed under the ISC License. See the [LICENSE](./LICENSE.txt) file for details.
 
 ---
 
