@@ -422,7 +422,7 @@ While TypeScript's type inference capabilities eliminate the need to manually sp
 - **Modern Support**: For newer projects or refactoring efforts, `hero-actions` works perfectly with `@reduxjs/toolkit`, supporting `configureStore` for a cleaner, more maintainable setup.
 - **Reducer Combination**: Both `combineReducers` and `configureStore` allow for combining multiple reducers, making `hero-actions` compatible with modular and scalable Redux architectures.
 
-### Example Project
+## Example Project
 
 To help you get started with **hero-actions**, I’ve created a fully-functional example project that demonstrates its core capabilities in a real-world scenario. This example shows how to integrate **hero-actions** with Redux core and Redux-Saga to manage a simulated login/logout flow. It also includes **redux-logger** for monitoring action flows, payloads, and state transitions, providing a clear view of how **hero-actions** simplifies action management.
 
