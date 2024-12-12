@@ -81,13 +81,14 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
-      - name: Create and push tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name: Configure git for authentication
         run: |
-          VERSION=$(node -p "require('./package.json').version")
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://NiccoCorsini:${{ secrets.PAT_TOKEN }}@github.com/NiccoCorsini/hero-actions.git
+      - name: Create and push tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
           git tag -a "v$VERSION" -m "Version $VERSION"
           git push origin "v$VERSION"
       - name: Create GitHub release
