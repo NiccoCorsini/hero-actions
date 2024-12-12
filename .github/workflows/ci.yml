@@ -79,7 +79,7 @@ jobs:
         run: npm ci
       - name: Create and push tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           VERSION=$(node -p "require('./package.json').version")
           git config user.name "github-actions[bot]"
@@ -90,7 +90,7 @@ jobs:
         uses: release-it/release-it-action@v2
         with:
           release: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           changelog: true
 
   publish:
