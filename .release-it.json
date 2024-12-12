@@ -1,9 +1,0 @@
-{
-  "github": {
-    "release": true,
-    "changelog": true
-  },
-  "npm": {
-    "publish": false
-  }
-}

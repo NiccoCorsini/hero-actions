@@ -76,26 +76,53 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: "npm"
+
       - name: Install dependencies
         run: npm ci
+
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Create and push tag
         run: |
           VERSION=$(node -p "require('./package.json').version")
           git tag -a "v$VERSION" -m "Version $VERSION"
           git push origin "v$VERSION"
-      - name: Create GitHub release
-        run: npx release-it
+          echo "LATEST_TAG=v$VERSION" >> $GITHUB_ENV
+
+      - name: Get tags and changelog
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n 2p)
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s")
+          else
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..${LATEST_TAG} --pretty=format:"- %s")
+          fi
+
+          echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_ENV
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ env.LATEST_TAG }}
+          release_name: ${{ env.LATEST_TAG }}
+          body: ${{ env.CHANGELOG }}
 
   publish:
     name: Publish to npm
