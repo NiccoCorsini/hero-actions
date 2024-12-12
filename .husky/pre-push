@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/h"
 
+echo "Running npm lint and tests..."
 npm run lint && npm run test
+
+echo "Husky pre-push hook completed"

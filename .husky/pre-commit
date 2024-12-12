@@ -1,4 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/h"
 
+echo "Husky pre-commit hook triggered"
+
+echo "Files staged for commit:"
+git diff --cached --name-only
+
+echo "Running npm lint:fix and format..."
 npm run lint:fix && npm run format
+
+echo "Husky pre-commit hook completed"
