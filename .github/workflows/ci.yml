@@ -91,7 +91,7 @@ jobs:
           git tag -a "v$VERSION" -m "Version $VERSION"
           git push origin "v$VERSION"
       - name: Create GitHub release
-        uses: release-it/release-it@v14.14.0
+        uses: release-it/release-it@v17.10.0
         with:
           release: true
           changelog: true
