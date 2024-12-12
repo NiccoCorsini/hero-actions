@@ -94,7 +94,7 @@ enum AuthActionTypes {
 
 ### Defining Payload Types
 
-Create an interface `AuthPayloads` mapping each action type to its payload:
+Create an interface `AuthActionsPayloads` mapping each action type to its payload:
 
 ```typescript
 // definitions/actions/auth.ts
@@ -116,10 +116,13 @@ Example:
 // store/actions/auth.ts
 
 import { createActionForPayloads } from "hero-actions"; // Assuming hero-actions is installed
-import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
+import {
+  AuthActionTypes,
+  AuthActionsPayloads,
+} from "../../definitions/actions/auth";
 
 // Create a factory function for action creators
-const createAuthAction = createActionForPayloads<AuthPayloads>();
+const createAuthAction = createActionForPayloads<AuthActionsPayloads>();
 
 // Create action creators
 export const loginRequest = createAuthAction(AuthActionTypes.LOGIN_REQUEST);
@@ -252,7 +255,10 @@ Example:
 // store/reducers/auth.ts
 
 import { createReducer, createHandlers } from "hero-actions";
-import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
+import {
+  AuthActionTypes,
+  AuthActionsPayloads,
+} from "../../definitions/actions/auth";
 
 // Define the state interface
 export interface AuthState {
@@ -268,7 +274,7 @@ const initialState: AuthState = {
 };
 
 // Define action handlers using createHandlers
-const authHandlers = createHandlers<AuthState, AuthPayloads>()({
+const authHandlers = createHandlers<AuthState, AuthActionsPayloads>()({
   [AuthActionTypes.LOGIN_REQUEST]: (state) => ({
     ...state,
     isAuthenticated: false, // Optionally set to false while logging in
@@ -288,7 +294,7 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
 });
 
 // Create the reducer
-export const authReducer = createReducer<AuthState, AuthPayloads>(
+export const authReducer = createReducer<AuthState, AuthActionsPayloads>(
   initialState,
   authHandlers
 );

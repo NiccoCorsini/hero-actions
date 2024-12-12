@@ -147,7 +147,7 @@ export const createHandlers = <State, Payloads extends PayloadsTree>() => {
             state: State,
             action: ActionWithPayload<Type, Payloads[Type]>
           ) => State;
-    }
+    },
   >(handlers: Handlers): Handlers {
     return handlers;
   };
