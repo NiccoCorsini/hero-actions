@@ -91,10 +91,7 @@ jobs:
           git tag -a "v$VERSION" -m "Version $VERSION"
           git push origin "v$VERSION"
       - name: Create GitHub release
-        uses: release-it/release-it@v17.10.0
-        with:
-          release: true
-          changelog: true
+        run: npx release-it
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
