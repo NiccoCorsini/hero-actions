@@ -1,4 +1,6 @@
 name: CI Pipeline
+permissions:
+  contents: write
 
 on:
   push:
@@ -81,11 +83,6 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
-      - name: Configure git for authentication
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://NiccoCorsini:${{ secrets.PAT_TOKEN }}@github.com/NiccoCorsini/hero-actions.git
       - name: Create and push tag
         run: |
           VERSION=$(node -p "require('./package.json').version")
@@ -94,7 +91,7 @@ jobs:
       - name: Create GitHub release
         run: npx release-it
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
   publish:
     name: Publish to npm
