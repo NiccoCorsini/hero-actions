@@ -105,9 +105,9 @@ jobs:
           PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n 2p)
 
           if [ -z "$PREVIOUS_TAG" ]; then
-            CHANGELOG=$(git log --pretty=format:"- %s")
+            CHANGELOG="Full Changelog: [${LATEST_TAG}...${LATEST_TAG}](https://github.com/NiccoCorsini/hero-actions/compare/${LATEST_TAG}...${LATEST_TAG})"
           else
-            CHANGELOG=$(git log ${PREVIOUS_TAG}..${LATEST_TAG} --pretty=format:"- %s")
+            CHANGELOG="Full Changelog: [${PREVIOUS_TAG}...${LATEST_TAG}](https://github.com/NiccoCorsini/hero-actions/compare/${PREVIOUS_TAG}...${LATEST_TAG})"
           fi
 
           echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_ENV
