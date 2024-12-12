@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "moduleResolution": "node",
     "module": "ESNext",
     "target": "ES5",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "tests", "**/*.test.ts", "**/*.test.tsx", "dist"]
 }

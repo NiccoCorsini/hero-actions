@@ -1,0 +1,5 @@
+echo "Husky pre-push hook triggered"
+
+npm run lint && npm run test
+
+echo "Husky pre-push hook completed"

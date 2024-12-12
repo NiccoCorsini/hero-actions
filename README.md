@@ -39,6 +39,8 @@ _Found it useful? Want more updates?_
   - [Creating Reducers](#creating-reducers)
   - [Compatibility](#compatibility)
   - [Managing Global State Types in Redux with TypeScript](#managing-global-state-types-in-redux-with-typescript)
+- [Testing](#testing)
+- [CI/CD Automation](#cicd-automation)
 - [Example Project](#example-project)
 - [API Reference](#api-reference)
   - [createActionForPayloads](#createactionforpayloads)
@@ -71,6 +73,9 @@ npm install hero-actions
 - **Simplified reducers**: Define reducers with type-safe handlers for each action.
 - **Minimal boilerplate**: Reduce repetitive code in your Redux setup.
 - **Modular support**: Easily integrate with modular Redux stores using `combineReducers`.
+- **Integration with Redux-Saga**: Perfect for managing side effects in async workflows.
+- **Built-in testing support**: Test your reducers and action creators with Jest.
+- **Automated CI/CD**: GitHub Actions pipeline ensures quality control and automated npm releases.
 
 ## Usage
 
@@ -94,7 +99,7 @@ enum AuthActionTypes {
 
 ### Defining Payload Types
 
-Create an interface `AuthPayloads` mapping each action type to its payload:
+Create an interface `AuthActionsPayloads` mapping each action type to its payload:
 
 ```typescript
 // definitions/actions/auth.ts
@@ -116,10 +121,13 @@ Example:
 // store/actions/auth.ts
 
 import { createActionForPayloads } from "hero-actions"; // Assuming hero-actions is installed
-import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
+import {
+  AuthActionTypes,
+  AuthActionsPayloads,
+} from "../../definitions/actions/auth";
 
 // Create a factory function for action creators
-const createAuthAction = createActionForPayloads<AuthPayloads>();
+const createAuthAction = createActionForPayloads<AuthActionsPayloads>();
 
 // Create action creators
 export const loginRequest = createAuthAction(AuthActionTypes.LOGIN_REQUEST);
@@ -252,7 +260,10 @@ Example:
 // store/reducers/auth.ts
 
 import { createReducer, createHandlers } from "hero-actions";
-import { AuthActionTypes, AuthPayloads } from "../../definitions/actions/auth";
+import {
+  AuthActionTypes,
+  AuthActionsPayloads,
+} from "../../definitions/actions/auth";
 
 // Define the state interface
 export interface AuthState {
@@ -268,7 +279,7 @@ const initialState: AuthState = {
 };
 
 // Define action handlers using createHandlers
-const authHandlers = createHandlers<AuthState, AuthPayloads>()({
+const authHandlers = createHandlers<AuthState, AuthActionsPayloads>()({
   [AuthActionTypes.LOGIN_REQUEST]: (state) => ({
     ...state,
     isAuthenticated: false, // Optionally set to false while logging in
@@ -288,7 +299,7 @@ const authHandlers = createHandlers<AuthState, AuthPayloads>()({
 });
 
 // Create the reducer
-export const authReducer = createReducer<AuthState, AuthPayloads>(
+export const authReducer = createReducer<AuthState, AuthActionsPayloads>(
   initialState,
   authHandlers
 );
@@ -421,6 +432,142 @@ While TypeScript's type inference capabilities eliminate the need to manually sp
 - **Legacy Support**: If you're maintaining an older codebase that uses `createStore`, you can easily integrate `hero-actions` without breaking any existing functionality.
 - **Modern Support**: For newer projects or refactoring efforts, `hero-actions` works perfectly with `@reduxjs/toolkit`, supporting `configureStore` for a cleaner, more maintainable setup.
 - **Reducer Combination**: Both `combineReducers` and `configureStore` allow for combining multiple reducers, making `hero-actions` compatible with modular and scalable Redux architectures.
+
+## Testing
+
+With Jest integration, hero-actions supports robust unit testing for reducers and action creators. Here's a quick example of how to test a reducer:
+
+```typescript
+import { createHandlers, createReducer } from "../src/reducer/reducer";
+import {
+  AuthActionsPayloads,
+  loginFailure,
+  loginRequest,
+  loginSuccess,
+} from "./createActionForPayloads.test";
+
+/**
+ * Interface defining the structure of the authentication state.
+ * - `isAuthenticated`: Indicates if the user is authenticated.
+ * - `status`: Represents the current status of the authentication process.
+ * - `userId` (optional): The ID of the authenticated user.
+ * - `token` (optional): The authentication token.
+ * - `error` (optional): The error object in case of a failure.
+ */
+interface AuthState {
+  isAuthenticated: boolean;
+  status: "idle" | "loading" | "success" | "failure";
+  userId?: string;
+  token?: string;
+  error?: Error;
+}
+
+/**
+ * The initial state of the authentication reducer.
+ * - `isAuthenticated` is set to false by default.
+ * - `status` is set to `"idle"`, indicating no ongoing operation.
+ */
+const initialState: AuthState = {
+  isAuthenticated: false,
+  status: "idle",
+};
+
+/**
+ * Handlers for managing the authentication state based on actions.
+ * - `"auth/LOGIN_REQUEST"`: Sets the status to `"loading"`.
+ * - `"auth/LOGIN_SUCCESS"`: Updates the state with user data and marks the login as successful.
+ * - `"auth/LOGIN_FAILURE"`: Updates the state with the error and sets the status to `"failure"`.
+ */
+const handlers = createHandlers<AuthState, AuthActionsPayloads>()({
+  "auth/LOGIN_REQUEST": (state) => ({
+    ...state,
+    status: "loading",
+  }),
+  "auth/LOGIN_SUCCESS": (state, action) => ({
+    ...state,
+    isAuthenticated: true,
+    status: "success",
+    userId: action.payload.userId,
+    token: action.payload.token,
+  }),
+  "auth/LOGIN_FAILURE": (state, action) => ({
+    ...state,
+    status: "failure",
+    error: action.payload.error,
+  }),
+});
+
+/**
+ * The authentication reducer combines the initial state and handlers.
+ * It processes actions to update the authentication state accordingly.
+ */
+const authReducer = createReducer<AuthState, AuthActionsPayloads>(
+  initialState,
+  handlers
+);
+
+/**
+ * Unit tests for the `authReducer`.
+ * These tests verify that the reducer updates the state correctly for each action type.
+ */
+describe("authReducer", () => {
+  it("should handle login request", () => {
+    // Simulates a login request and verifies the state update
+    const newState = authReducer(initialState, loginRequest());
+
+    expect(newState).toEqual({
+      ...initialState,
+      status: "loading",
+    });
+  });
+
+  it("should handle login success", () => {
+    // Simulates a successful login and verifies the state update
+    const newState = authReducer(
+      initialState,
+      loginSuccess({ userId: "test_user", token: "test_token" })
+    );
+
+    expect(newState).toEqual({
+      ...initialState,
+      isAuthenticated: true,
+      status: "success",
+      userId: "test_user",
+      token: "test_token",
+    });
+  });
+
+  it("should handle login failure", () => {
+    // Simulates a login failure and verifies the state update
+    const error = new Error("Invalid credentials");
+    const newState = authReducer(initialState, loginFailure({ error }));
+
+    expect(newState).toEqual({
+      ...initialState,
+      status: "failure",
+      error,
+    });
+  });
+
+  it("should ignore unknown actions", () => {
+    // Ensures that unknown actions do not modify the state
+    const action = { type: "unknown/action" };
+    const newState = authReducer(initialState, action);
+
+    expect(newState).toEqual(initialState);
+  });
+});
+```
+
+## CI/CD Automation
+
+**hero-actions** includes an automated pipeline using GitHub Actions:
+
+- **Linting**: Ensures code quality with ESLint and Prettier.
+- **Testing**: Runs unit tests with Jest.
+- **Building**: Generates the dist folder using TypeScript.
+- **Releasing**: Publishes new npm releases based on the version in package.json.
+  The workflow automatically tags releases (e.g., v1.0.0) and generates a changelog.
 
 ## Example Project
 
