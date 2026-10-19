@@ -1,5 +1,5 @@
-import { ActionWithPayload, PayloadsTree } from "../definitions/actions";
-import { ActionHandlers } from "../definitions/reducer";
+import { ActionWithPayload, PayloadsTree } from "../definitions/actions.js";
+import { ActionHandlers } from "../definitions/reducer.js";
 /**
  * Creates a type-safe reducer function for managing state in Redux.
  *

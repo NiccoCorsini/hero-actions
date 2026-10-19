@@ -1,24 +1,10 @@
 <div align="center">
 
-  <img src="./assets/hero-actions-logo.webp" alt="hero-actions-logo" width="50"/>
+  <img src="https://raw.githubusercontent.com/NiccoCorsini/hero-actions/main/assets/hero-actions-logo.webp" alt="hero-actions-logo" width="50"/>
 
 # hero-actions
 
 A powerful TypeScript library designed to streamline the creation of type-safe Redux action creators and reducers. With **hero-actions**, you can reduce boilerplate code, improve type safety, and write cleaner, more maintainable Redux logic.
-
-[![Latest Stable Version](https://img.shields.io/npm/v/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
-[![NPM Downloads](https://img.shields.io/npm/dm/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
-[![NPM Downloads](https://img.shields.io/npm/dt/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
-[![Bundlephobia Size](https://img.shields.io/bundlephobia/minzip/hero-actions.svg)](https://www.npmjs.com/package/hero-actions)
-[![License](https://img.shields.io/npm/l/hero-actions.svg?style=flat)](https://github.com/NiccoCorsini/hero-actions?tab=License-1-ov-file)
-
-_Found it useful? Want more updates?_
-
-[**Show your support by giving a :star:**](https://github.com/NiccoCorsini/hero-actions/stargazers)
-
-<a href="https://buymeacoffee.com/niccocorsini">
-  <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me a Coffee">
-</a>
 
 <br/>
 <hr/>
@@ -90,7 +76,7 @@ Define an enum like `AuthActionTypes` with the following action types:
 ```typescript
 // definitions/actions/auth.ts
 
-enum AuthActionTypes {
+export enum AuthActionTypes {
   LOGIN_REQUEST = "auth/LOGIN_REQUEST",
   LOGIN_SUCCESS = "auth/LOGIN_SUCCESS",
   LOGIN_FAILURE = "auth/LOGIN_FAILURE",
@@ -177,9 +163,7 @@ const MyComponent = () => {
       });
 
       if (!response.ok) {
-        const error = "Login failed";
-        dispatch(loginFailure({ error }));
-        throw new Error(error);
+        throw new Error("Login failed");
       }
 
       // Parse the response data
@@ -187,7 +171,8 @@ const MyComponent = () => {
 
       // Dispatching login success with the received user data
       dispatch(loginSuccess({ userId, token }));
-    } catch (error) {
+    } catch (cause) {
+      const error = cause instanceof Error ? cause : new Error(String(cause));
       dispatch(loginFailure({ error }));
       console.error("Login failed", error);
       // You can dispatch a login failure action here if needed
@@ -377,7 +362,7 @@ export type State = {
 };
 
 // you don't need to specify <State> it will work fine without it
-const store = configureStore<State>({
+const store = configureStore({
   reducer: {
     auth: authReducer,
   },
@@ -567,7 +552,7 @@ describe("authReducer", () => {
 - **Testing**: Runs unit tests with Jest.
 - **Building**: Generates the dist folder using TypeScript.
 - **Releasing**: Publishes new npm releases based on the version in package.json.
-  The workflow automatically tags releases (e.g., v1.0.0) and generates a changelog.
+  After validation, the workflow publishes the package, tags the release (e.g., v1.0.0), and generates GitHub release notes.
 
 ## Example Project
 

@@ -1,4 +1,4 @@
-import { Action, ActionWithPayload, PayloadsTree } from "./actions";
+import { Action, ActionWithPayload, PayloadsTree } from "./actions.js";
 /**
  * A type that represents a collection of action handler functions for a reducer.
  *

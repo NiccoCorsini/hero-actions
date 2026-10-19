@@ -1,4 +1,4 @@
-import { Action, ActionWithPayload, PayloadsTree } from "../definitions/actions";
+import { Action, ActionWithPayload, PayloadsTree } from "../definitions/actions.js";
 export declare const createSimpleAction: <T extends string>(type: T) => (() => Action<T>);
 export declare const createPayloadAction: <T extends string, P>(type: T) => ((payload: P) => ActionWithPayload<T, P>);
 /**

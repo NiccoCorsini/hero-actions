@@ -1,10 +1,11 @@
 {
   "name": "hero-actions",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "assets/hero-actions-logo.webp"
   ],
   "type": "module",
   "scripts": {
@@ -13,7 +14,7 @@
     "format": "prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "build": "npx tsc",
+    "build": "tsc",
     "prepublishOnly": "npm run lint && npm run build && npm test",
     "prepare": "husky"
   },

@@ -2,7 +2,7 @@ import {
   Action,
   ActionWithPayload,
   PayloadsTree,
-} from "../definitions/actions";
+} from "../definitions/actions.js";
 
 export const createSimpleAction =
   <T extends string>(type: T): (() => Action<T>) =>
